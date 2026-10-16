@@ -1,0 +1,205 @@
+<div class="registration-page">
+
+  <div class="registration-layout">
+
+    <!-- Lottie Animation Container -->
+    <div class="animation-container">
+      <iframe
+        src="https://lottie.host/embed/c621962d-8711-48c2-b334-f706e7349f58/SWzfkoR18j.lottie"
+        width="100%"
+        height="100%"
+        frameborder="0">
+      </iframe>
+    </div>
+
+    <!-- Registration Form Container -->
+    <div class="registration-container">
+      <h2>Registration</h2>
+
+      <form [formGroup]="registrationForm">
+
+        <!-- Username -->
+        <div class="form-group">
+          <label>Username*</label>
+          <input type="text" formControlName="username" maxlength="20">
+
+          <small
+            class="error"
+            *ngIf="f['username'].touched && f['username'].errors?.['required']">
+            *Username is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['username'].touched && !f['username'].errors?.['required'] && f['username'].errors?.['whitespace']">
+            *Username cannot contain only spaces
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['username'].touched && !f['username'].errors?.['required'] && !f['username'].errors?.['whitespace'] && f['username'].errors?.['maxlength']">
+            *Username should not exceed 20 characters
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['username'].touched && !f['username'].errors?.['required'] && !f['username'].errors?.['whitespace'] && f['username'].errors?.['pattern']">
+            *Username must contain at least 3 letters and can only contain letters, numbers, and underscore (_)
+          </small>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email*</label>
+          <input type="email" formControlName="email">
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched && f['email'].errors?.['required']">
+            *Email is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched && f['email'].errors?.['email']">
+            *Please enter a valid email
+          </small>
+
+          <small
+            class="error"
+            *ngIf="userExists">
+            *User already exists. Please use another email.
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched && f['email'].errors?.['whitespace']">
+            *Email cannot contain only spaces
+          </small>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label>Password*</label>
+          <input type="password" formControlName="password">
+
+          <small
+            class="error"
+            *ngIf="f['password'].touched && f['password'].errors?.['required']">
+            *Password is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['password'].touched && !f['password'].errors?.['required'] && f['password'].errors?.['whitespace']">
+            *Password cannot contain only spaces
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['password'].touched && !f['password'].errors?.['required'] && !f['password'].errors?.['whitespace'] && f['password'].errors?.['pattern']">
+            *Password must contain uppercase, lowercase, digit and special character
+          </small>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label>Confirm Password*</label>
+          <input type="password" formControlName="confirmPassword">
+
+          <small
+            class="error"
+            *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors?.['required']">
+            *Confirm Password is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="registrationForm.errors?.['passwordMismatch'] && f['confirmPassword'].touched && !f['confirmPassword'].errors?.['required']">
+            *Passwords do not match
+          </small>
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="form-group">
+          <label>Mobile Number*</label>
+          <input type="text" formControlName="mobileNumber">
+
+          <small
+            class="error"
+            *ngIf="f['mobileNumber'].touched && f['mobileNumber'].errors?.['required']">
+            *Mobile number is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['mobileNumber'].touched && !f['mobileNumber'].errors?.['required'] && f['mobileNumber'].errors?.['whitespace']">
+            *Mobile number cannot contain only spaces
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['mobileNumber'].touched && !f['mobileNumber'].errors?.['required'] && !f['mobileNumber'].errors?.['whitespace'] && f['mobileNumber'].errors?.['pattern']">
+            *Mobile number must be 10 digits
+          </small>
+        </div>
+
+        <!-- Role -->
+        <div class="form-group">
+          <label>Role*</label>
+
+          <select formControlName="role">
+            <option value="">Select a role</option>
+            <option value="Admin">Nutritionist</option>
+            <option value="User">User</option>
+          </select>
+
+          <small
+            class="error"
+            *ngIf="f['role'].touched && f['role'].errors?.['required']">
+            *Role is required
+          </small>
+        </div>
+
+        <!-- Nutritionist Super Key -->
+        <div
+          class="form-group"
+          *ngIf="f['role'].value === 'Admin'">
+
+          <label>Nutritionist Super Key*</label>
+
+          <input
+            type="password"
+            formControlName="superKey"
+            placeholder="Enter Super Key">
+        </div>
+
+        <small
+          class="error"
+          *ngIf="registrationFailed">
+          Registration failed. Please try again.
+        </small>
+
+        <button
+          type="button"
+          (click)="register()"
+          [disabled]="registrationForm.invalid">
+          Register
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Success Popup -->
+  <div class="popup-overlay" *ngIf="showSuccessPopup">
+    <div class="popup-box">
+      <div class="success-icon">✓</div>
+      <h3>Registration Successful</h3>
+      <p>Your account has been created successfully.</p>
+      <button class="popup-btn" (click)="onPopupOk()">OK</button>
+    </div>
+  </div>
+
+</div>

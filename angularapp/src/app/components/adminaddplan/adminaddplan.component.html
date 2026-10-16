@@ -1,0 +1,207 @@
+<div class="page-wrapper">
+
+    <div class="form-card">
+  
+      <h2 class="form-title">
+        Add Diet Plan
+      </h2>
+  
+      <p class="form-subtitle">
+        Create a personalized diet plan for your users.
+      </p>
+  
+      <form
+        [formGroup]="dietPlanForm"
+        class="diet-form">
+  
+        <!-- Plan Name -->
+  
+        <div class="form-group">
+  
+          <label>
+            Plan Name <span class="required">*</span>
+          </label>
+  
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter diet plan name"
+            formControlName="planName"
+            maxlength="30">
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('planName')?.touched &&
+            dietPlanForm.get('planName')?.errors?.['required']">
+            Plan Name is required
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('planName')?.touched &&
+            dietPlanForm.get('planName')?.errors?.['whitespace']">
+            Plan Name cannot contain only spaces
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('planName')?.touched &&
+            dietPlanForm.get('planName')?.errors?.['maxlength']">
+            Plan Name should not exceed 30 characters
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('planName')?.touched &&
+            dietPlanForm.get('planName')?.errors?.['pattern']">
+            Only letters, numbers, spaces, hyphen (-) and underscore (_) are allowed
+          </small>
+  
+        </div>
+  
+        <!-- Description -->
+  
+        <div class="form-group">
+  
+          <label>
+            Description <span class="required">*</span>
+          </label>
+  
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter description"
+            formControlName="description"
+            maxlength="500">
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('description')?.touched &&
+            dietPlanForm.get('description')?.errors?.['required']">
+            Description is required
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('description')?.touched &&
+            dietPlanForm.get('description')?.errors?.['leadingWhitespace']">
+            Description cannot start with spaces
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('description')?.touched &&
+            dietPlanForm.get('description')?.errors?.['maxlength']">
+            Maximum 500 characters allowed
+          </small>
+  
+        </div>
+  
+        <!-- Duration -->
+  
+        <div class="form-group">
+  
+          <label>
+            Duration (Days) <span class="required">*</span>
+          </label>
+  
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter duration"
+            formControlName="duration">
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('duration')?.touched &&
+            dietPlanForm.get('duration')?.errors?.['required']">
+            Duration is required
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('duration')?.touched &&
+            dietPlanForm.get('duration')?.errors?.['pattern']">
+            Duration must contain only numbers
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('duration')?.touched &&
+            dietPlanForm.get('duration')?.errors?.['min']">
+            Duration must be greater than 0
+          </small>
+  
+          <small
+            class="error-message"
+            *ngIf="dietPlanForm.get('duration')?.touched &&
+            dietPlanForm.get('duration')?.errors?.['max']">
+            Duration must be less than or equal to 366
+          </small>
+  
+        </div>
+  
+        <!-- Errors -->
+  
+        <div
+          class="alert-banner"
+          *ngIf="allFieldsError">
+  
+          All fields are required.
+        </div>
+  
+        <div
+          class="alert-banner"
+          *ngIf="duplicatePlanError">
+  
+          Diet Plan already exists.
+        </div>
+  
+        <!-- Button -->
+  
+        <button
+          type="button"
+          class="submit-btn"
+          (click)="submit()">
+  
+          Create Diet Plan
+  
+        </button>
+  
+      </form>
+  
+    </div>
+  
+  </div>
+  
+  <!-- SUCCESS POPUP -->
+  
+  <div
+    class="popup-overlay"
+    *ngIf="showSuccessPopup">
+  
+    <div class="popup-card">
+  
+      <div class="success-circle">
+        ✓
+      </div>
+  
+      <h3>
+        Diet Plan Added
+      </h3>
+  
+      <p>
+        Your diet plan has been created successfully.
+      </p>
+  
+      <button
+        class="popup-button"
+        (click)="closePopup()">
+  
+        Continue
+  
+      </button>
+  
+    </div>
+  
+  </div>

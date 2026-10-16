@@ -1,0 +1,108 @@
+<div class="login-page">
+
+  <div class="login-layout">
+
+    <!-- Lottie Animation Container -->
+    <div class="animation-container">
+      <iframe
+        src="https://lottie.host/embed/3e41a0d4-374d-430c-a5c1-b1f85dfb9c88/ax63mc3oPr.lottie"
+        width="100%"
+        height="100%"
+        frameborder="0">
+      </iframe>
+    </div>
+
+    <!-- Login Form Container -->
+    <div class="login-container">
+
+      <h2>Login</h2>
+
+      <form [formGroup]="loginForm">
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email*</label>
+
+          <input type="email" formControlName="email">
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched && f['email'].errors?.['required']">
+            *Email is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched &&
+                   !f['email'].errors?.['required'] &&
+                   f['email'].errors?.['whitespace']">
+            *Email cannot contain only spaces
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched &&
+                   f['email'].errors?.['pattern']">
+            *Please enter a valid email address
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['email'].touched &&
+                   f['email'].errors?.['spacesNotAllowed']">
+            *Spaces are not allowed in email
+          </small>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label>Password*</label>
+
+          <input type="password" formControlName="password">
+
+          <small
+            class="error"
+            *ngIf="f['password'].touched &&
+                   f['password'].errors?.['required']">
+            *Password is required
+          </small>
+
+          <small
+            class="error"
+            *ngIf="f['password'].touched &&
+                   !f['password'].errors?.['required'] &&
+                   f['password'].errors?.['whitespace']">
+            *Password cannot contain only spaces
+          </small>
+        </div>
+
+        <!-- Invalid Credentials -->
+        <small
+          class="error"
+          *ngIf="invalidCredentials">
+          *Invalid email or password
+        </small>
+
+        <button
+          type="button"
+          (click)="login()"
+          [disabled]="loginForm.invalid">
+          Login
+        </button>
+
+        <p class="register-link">
+          Don't have an account?
+          <a
+            (click)="navigateToRegister()"
+            style="cursor:pointer;">
+            Register here
+          </a>
+        </p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,249 @@
+<div class="ambient-background">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+</div>
+
+<div class="container">
+
+    <div class="card edit-card glass-panel">
+
+        <div class="header-action">
+            <button
+                class="back-btn"
+                (click)="back()">
+
+                <svg width="16"
+                     height="16"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+
+                    <polyline points="12 19 5 12 12 5"></polyline>
+
+                </svg>
+
+                <span>Back</span>
+
+            </button>
+        </div>
+
+        <div class="card-body">
+
+            <h2 class="form-title">
+                Edit Diet Plan
+            </h2>
+
+            <div class="gradient-divider"></div>
+
+            <form
+                [formGroup]="editPlanForm"
+                (ngSubmit)="updatePlan()"
+                class="diet-form">
+
+                <!-- PLAN NAME -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Plan Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        formControlName="planName"
+                        placeholder="Enter plan name">
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['planName'].touched &&
+                               f['planName'].errors?.['required']">
+
+                        Plan Name is required
+
+                    </small>
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['planName'].touched &&
+                               f['planName'].errors?.['pattern']">
+
+                        Plan Name cannot start with space and special characters are not allowed
+
+                    </small>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Description
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        formControlName="description"
+                        placeholder="Enter description">
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['description'].touched &&
+                               f['description'].errors?.['required']">
+
+                        Description is required
+
+                    </small>
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['description'].touched &&
+                               f['description'].errors?.['pattern']">
+
+                        Description cannot start with space and special characters are not allowed
+
+                    </small>
+
+                </div>
+
+                <!-- DURATION -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Duration
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        formControlName="duration"
+                        placeholder="Duration in days">
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['duration'].touched &&
+                               f['duration'].errors?.['required']">
+
+                        Duration is required
+
+                    </small>
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['duration'].touched &&
+                               f['duration'].errors?.['pattern']">
+
+                        Duration must contain numbers only
+
+                    </small>
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['duration'].touched &&
+                               f['duration'].errors?.['min']">
+
+                        Duration must be at least 1 day
+
+                    </small>
+
+                    <small
+                        class="error-message"
+                        *ngIf="f['duration'].touched &&
+                               f['duration'].errors?.['max']">
+
+                        Duration cannot exceed 365 days
+
+                    </small>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+
+                    <span>
+                        Update Diet Plan
+                    </span>
+
+                    <svg width="16"
+                         height="16"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2.5"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <polyline
+                            points="20 6 9 17 4 12">
+                        </polyline>
+
+                    </svg>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SUCCESS POPUP -->
+
+<div
+    class="popup-overlay"
+    *ngIf="showSuccessPopup">
+
+    <div class="popup-card glass-panel">
+
+        <div class="success-icon-wrapper">
+
+            <svg width="26"
+                 height="26"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="3"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <polyline
+                    points="20 6 9 17 4 12">
+                </polyline>
+
+            </svg>
+
+        </div>
+
+        <h4>
+            Updated Successfully
+        </h4>
+
+        <p class="popup-sub">
+            Your diet plan changes have been saved.
+        </p>
+
+        <button
+            class="ok-btn"
+            (click)="closePopup()">
+
+            OK
+
+        </button>
+
+    </div>
+
+</div>

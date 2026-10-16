@@ -1,0 +1,229 @@
+<!-- Ambient Background Graphics -->
+<div class="ambient-background"></div>
+
+<main class="content-container">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">
+      Diet Plan Requests
+    </h1>
+    <p class="page-subtitle">
+      Review and manage user diet plan requests.
+    </p>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search requests..."
+      [(ngModel)]="searchText"
+      (input)="searchPlans()">
+
+    <select
+      class="status-dropdown"
+      [(ngModel)]="selectedStatus"
+      (change)="filterStatus()">
+      <option value="All">All Requests</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <!-- Table Container -->
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Username</th>
+          <th>Plan Name</th>
+          <th>Submitted</th>
+          <th>Age</th>
+          <th>Weight</th>
+          <th>Height</th>
+          <th>Gender</th>
+          <th>Activity Level</th>
+          <th>Goal</th>
+          <th>Medical Conditions</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <!-- Skeleton Loading Rows -->
+      <tbody *ngIf="isLoadingRequests">
+        <tr *ngFor="let dummy of [1, 2, 3, 4, 5]" class="skeleton-row">
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill medium"></div></td>
+          <td><div class="skeleton-pill long"></div></td>
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill short"></div></td>
+          <td><div class="skeleton-pill badge"></div></td>
+          <td><div class="skeleton-pill medium"></div></td>
+          <td><div class="skeleton-pill medium"></div></td>
+          <td><div class="skeleton-pill badge"></div></td>
+          <td>
+            <div class="skeleton-actions">
+              <div class="skeleton-pill btn-placeholder"></div>
+              <div class="skeleton-pill btn-placeholder"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- Real Data Rows -->
+      <tbody *ngIf="!isLoadingRequests && filteredRequests.length > 0">
+        <tr *ngFor="let plan of paginatedRequests; let i=index">
+          <td>
+            {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+          </td>
+          <td>
+            {{ getUsername(plan) }}
+          </td>
+          <td class="plan-cell">
+            {{ getPlanName(plan) }}
+          </td>
+          <td>
+            {{ (plan.createdAt ?? plan.CreatedAt) | date:'dd/MM/yyyy' }}
+          </td>
+          <td>
+            {{ plan.age ?? plan.Age }}
+          </td>
+          <td>
+            {{ plan.weight ?? plan.Weight }}kg
+          </td>
+          <td>
+            {{ plan.height ?? plan.Height }}cm
+          </td>
+          <td>
+            {{ plan.gender ?? plan.Gender }}
+          </td>
+          <td>
+            <span class="activity-badge">
+              {{ plan.activityLevel ?? plan.ActivityLevel }}
+            </span>
+          </td>
+          <td>
+            {{ plan.goal ?? plan.Goal }}
+          </td>
+          <td>
+            {{ plan.medicalConditions ?? plan.MedicalConditions }}
+          </td>
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="getStatus(plan).toLowerCase()">
+              {{ getStatus(plan) }}
+            </span>
+          </td>
+          <td>
+            <div class="action-cell">
+              <!-- Details -->
+              <button
+                class="btn btn-show"
+                (click)="showDetails(plan.dietPlanId ?? plan.DietPlanId)">
+                Details
+              </button>
+
+              <!-- Approve -->
+              <button
+                class="btn btn-approve"
+                *ngIf="getStatus(plan) === 'Pending' || getStatus(plan) === 'Rejected'"
+                (click)="approvePlan(plan)">
+                Approve
+              </button>
+
+              <!-- Reject -->
+              <button
+                class="btn btn-reject"
+                *ngIf="getStatus(plan) === 'Pending' || getStatus(plan) === 'Approved'"
+                (click)="rejectPlan(plan)">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State Inside Table Frame -->
+    <div
+      class="no-records-container"
+      *ngIf="!isLoadingRequests && filteredRequests.length === 0">
+      <p class="no-records">
+        No Requests Found
+      </p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="pagination"
+    *ngIf="!isLoadingRequests && filteredRequests.length > 0">
+    <button
+      (click)="previousPage()"
+      [disabled]="currentPage === 1">
+      Previous
+    </button>
+
+    <span>
+      {{ currentPage }} of {{ totalPages }}
+    </span>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+
+</main>
+
+<!-- Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="showModal">
+  <div class="modal-box">
+    <button
+      class="modal-close-btn"
+      (click)="closeModal()">
+      ×
+    </button>
+
+    <h3 class="modal-title">
+      Plan Details
+    </h3>
+
+    <div *ngIf="isLoadingPlanDetails" class="modal-skeleton">
+      <div class="skeleton-pill long" style="margin-bottom: 12px;"></div>
+      <div class="skeleton-pill medium"></div>
+    </div>
+
+    <div *ngIf="!isLoadingPlanDetails">
+      <div class="detail-row">
+        <span class="detail-label">
+          Plan Description
+        </span>
+        <p class="detail-value">
+          {{ selectedDietPlan.description || selectedDietPlan.planDescription }}
+        </p>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">
+          Duration
+        </span>
+        <p class="detail-value highlight-text">
+          {{ selectedDietPlan.duration || selectedDietPlan.planDuration }} Days
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

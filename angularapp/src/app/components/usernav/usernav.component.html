@@ -1,0 +1,28 @@
+<nav class="dynamic-navbar">
+  <!-- Logo -->
+  <div class="logo">
+    🍏 DietPlanner
+  </div>
+
+  <!-- Role Tag -->
+  <span class="role">{{ username || 'user' }} | User</span>
+
+  <!-- Menu Navigation Links -->
+  <div class="menu">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/userviewplan" routerLinkActive="active">Diet Plans</a>
+    <a routerLink="/userappliedplan" routerLinkActive="active">Applied Plan</a>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown">
+      <span class="dropbtn">Feedbacks ▾</span>
+      <div class="dropdown-content">
+        <a routerLink="/useraddfeedback" routerLinkActive="active">Post Feedback</a>
+        <a routerLink="/userviewfeedback" routerLinkActive="active">My Feedbacks</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Button -->
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>

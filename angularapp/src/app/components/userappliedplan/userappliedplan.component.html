@@ -1,0 +1,119 @@
+<!-- Ambient Background Elements -->
+<div class="ambient-background">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+  </div>
+  
+  <div class="applied-plan-container">
+  
+    <!-- Header Section -->
+    <div class="header-section">
+      <h2 class="heading">Applied Diet Plans</h2>
+      <p class="sub-heading">Track and manage your submitted diet plan applications</p>
+    </div>
+  
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="search-box"
+          placeholder="Search requests..."
+          [(ngModel)]="searchText"
+          (input)="searchPlans()">
+      </div>
+    </div>
+  
+    <!-- Main Table Structure -->
+    <div class="table-card glass-panel">
+      <div class="table-wrapper">
+        <table class="plan-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Request ID</th>
+              <th>Plan ID</th>
+              <th>Submitted</th>
+              <th>Age</th>
+              <th>Weight</th>
+              <th>Height</th>
+              <th>Gender</th>
+              <th>Activity Level</th>
+              <th>Goal</th>
+              <th>Medical Conditions</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <!-- Loading State -->
+            <tr *ngIf="isLoading">
+              <td colspan="13" class="loading-cell">
+                <div class="spinner-container">
+                  <div class="pulse-spinner"></div>
+                  <span>Loading applications...</span>
+                </div>
+              </td>
+            </tr>
+  
+            <!-- Empty State -->
+            <tr *ngIf="!isLoading && filteredPlans.length === 0">
+              <td colspan="13" class="empty-cell">
+                <div class="empty-state">
+                  <span class="empty-icon">📋</span>
+                  <p>No records found matching your search.</p>
+                </div>
+              </td>
+            </tr>
+  
+            <!-- Data Rows -->
+            <tr *ngFor="let plan of filteredPlans; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="fw-semibold">#{{ plan.dietPlanRequestId }}</td>
+              <td>{{ plan.dietPlanId }}</td>
+              <td>{{ plan.createdAt | date:'dd/MM/yyyy' }}</td>
+              <td>{{ plan.age }}</td>
+              <td>{{ plan.weight }}kg</td>
+              <td>{{ plan.height }}cm</td>
+              <td>{{ plan.gender }}</td>
+              <td>
+                <span class="badge activity-badge">{{ plan.activityLevel }}</span>
+              </td>
+              <td class="text-truncate" [title]="plan.goal">{{ plan.goal }}</td>
+              <td class="text-truncate" [title]="plan.medicalConditions">{{ plan.medicalConditions }}</td>
+              <td>
+                <span class="badge status-badge" [ngClass]="{
+                  'status-approved': plan.status?.toLowerCase() === 'approved',
+                  'status-pending': plan.status?.toLowerCase() === 'pending',
+                  'status-rejected': plan.status?.toLowerCase() === 'rejected'
+                }">
+                  {{ plan.status || 'Pending' }}
+                </span>
+              </td>
+              <td>
+                <button class="delete-btn" (click)="openDeletePopup(plan.dietPlanRequestId)">
+                  unenroll
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  </div>
+  
+  <!-- Delete Confirmation Modal Popup -->
+  <div class="popup-overlay" *ngIf="showDeletePopup">
+    <div class="popup-card">
+      <div class="warning-icon-badge">!</div>
+      <h3>Confirm Unenrollment</h3>
+      <p>Are you sure you want to unenroll this diet plan request?</p>
+      <div class="popup-buttons">
+        <button class="yes-btn" (click)="confirmDelete()">yes</button>
+        <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,206 @@
+<!-- Ambient Glowing Background Graphics -->
+<div class="ambient-background">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+</div>
+
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="header-section">
+        <h2 class="text-center page-title">
+            Feedback Details
+        </h2>
+        <div class="gradient-divider"></div>
+    </div>
+
+    <!-- Table Wrapper Container -->
+    <div class="table-responsive-wrapper glass-panel">
+
+        <table class="table">
+
+            <thead class="table-header">
+                <tr>
+                    <th>S.No</th>
+                    <th>User Name</th>
+                    <th>Feedback</th>
+                    <th>Posted Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <!-- Skeleton Loading State -->
+            <tbody *ngIf="isLoadingFeedbacks">
+                <tr *ngFor="let dummy of [1, 2, 3, 4, 5]" class="skeleton-row">
+                    <td class="index-cell">
+                        <div class="skeleton-pill short"></div>
+                    </td>
+
+                    <td class="user-cell">
+                        <div class="skeleton-pill avatar-placeholder"></div>
+                        <div class="skeleton-pill medium"></div>
+                    </td>
+
+                    <td class="feedback-text-cell">
+                        <div class="skeleton-pill long"></div>
+                    </td>
+
+                    <td class="date-cell">
+                        <div class="skeleton-pill short"></div>
+                    </td>
+
+                    <td>
+                        <div class="skeleton-pill btn-placeholder"></div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- Real Feedback Data -->
+            <tbody *ngIf="!isLoadingFeedbacks && feedbacks.length > 0">
+                <tr *ngFor="let feedback of paginatedFeedbacks; let i = index">
+                    <td class="index-cell">
+                        {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+                    </td>
+
+                    <td class="user-cell">
+                        <span class="user-avatar-badge">
+                            {{ (feedback.userName || 'U')[0].toUpperCase() }}
+                        </span>
+                        {{ feedback.userName || 'Loading...' }}
+                    </td>
+
+                    <td class="feedback-text-cell">
+                        {{ feedback.feedbackText || feedback.FeedbackText }}
+                    </td>
+
+                    <td class="date-cell">
+                        {{ (feedback.date || feedback.Date) | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <td>
+                        <button class="btn btn-show-profile" (click)="showProfile(feedback)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>Show Profile</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- Empty State -->
+            <tbody *ngIf="!isLoadingFeedbacks && feedbacks.length === 0">
+                <tr>
+                    <td colspan="5" class="text-center no-records">
+                        <div class="empty-state-box">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                            <p>Oops! No records found</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- USER PROFILE MODAL -->
+<div class="modal-overlay" *ngIf="showModal">
+
+    <div class="profile-modal glass-panel">
+
+        <button class="modal-close-icon" (click)="closeModal()">
+            &times;
+        </button>
+
+        <div class="modal-header">
+            <div class="icon-avatar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <h5>User Details</h5>
+        </div>
+
+        <div class="modal-body">
+
+            <!-- User Modal Skeleton Loading -->
+            <div *ngIf="isLoadingUser" class="modal-skeleton-wrapper">
+                <div class="detail-item">
+                    <div class="skeleton-pill label-placeholder"></div>
+                    <div class="skeleton-pill medium"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="skeleton-pill label-placeholder"></div>
+                    <div class="skeleton-pill long"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="skeleton-pill label-placeholder"></div>
+                    <div class="skeleton-pill medium"></div>
+                </div>
+            </div>
+
+            <!-- User Details -->
+            <div *ngIf="!isLoadingUser && selectedUser" class="user-details-list">
+
+                <div class="detail-item">
+                    <span class="detail-label">Username</span>
+                    <span class="detail-value highlight">
+                        {{ selectedUser?.username || selectedUser?.userName || selectedUser?.Username }}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Email</span>
+                    <span class="detail-value">
+                        {{ selectedUser?.email || selectedUser?.Email }}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Mobile Number</span>
+                    <span class="detail-value">
+                        {{ selectedUser?.mobileNumber || selectedUser?.MobileNumber }}
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="!isLoadingUser && !selectedUser" class="error-state">
+                <p class="text-danger">
+                    Unable to load user details. User record may no longer exist.
+                </p>
+            </div>
+
+        </div>
+
+        <button class="btn btn-close-modal" (click)="closeModal()">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Pagination -->
+<div class="pagination" *ngIf="!isLoadingFeedbacks && feedbacks.length > 0">
+    <button (click)="previousPage()" [disabled]="currentPage === 1">
+        Previous
+    </button>
+
+    <span>
+        Page {{ currentPage }} of {{ totalPages }}
+    </span>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next
+    </button>
+</div>

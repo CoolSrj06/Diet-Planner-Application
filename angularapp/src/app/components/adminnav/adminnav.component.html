@@ -1,0 +1,57 @@
+<nav class="dynamic-navbar">
+
+  <div class="logo">
+    🍏 DietPlanner
+  </div>
+
+  <div class="menu">
+
+    <span class="role">
+      {{username}} | Nutritionist
+    </span>
+
+    <a
+      routerLink=""
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
+      Home
+    </a>
+
+    <div class="dropdown">
+      <span class="dropbtn">
+        Diet Plans ▾
+      </span>
+
+      <div class="dropdown-content">
+        <a routerLink="/adddietplan" routerLinkActive="active">
+          Add Diet Plan
+        </a>
+        <a routerLink="/adminviewplan" routerLinkActive="active">
+          View Diet Plans
+        </a>
+      </div>
+    </div>
+
+    <a
+      routerLink="/requestedplan"
+      routerLinkActive="active"
+      class="requests-link">
+      Requests
+      <span *ngIf="pendingRequestCount > 0" class="request-badge">
+        {{ pendingRequestCount }}
+      </span>
+    </a>
+
+    <a
+      routerLink="/adminfeedback"
+      routerLinkActive="active">
+      Feedbacks
+    </a>
+
+    <button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+
+  </div>
+
+</nav>

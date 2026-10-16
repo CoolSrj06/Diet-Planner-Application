@@ -1,0 +1,226 @@
+<!-- Ambient Background Elements -->
+<div class="ambient-background">
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+</div>
+
+<div class="view-plan-container">
+
+  <!-- Header Section -->
+  <div class="header-section">
+    <h1 class="heading">Available Diet Plans</h1>
+    <p class="sub-heading">
+      Browse through available plans and select one to get started.
+    </p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+
+      <input
+        type="text"
+        class="search-box"
+        placeholder="Search plans..."
+        [(ngModel)]="searchText"
+        (input)="searchPlans()">
+    </div>
+  </div>
+
+  <!-- Main Table Structure -->
+  <div class="table-card glass-panel">
+
+    <div class="table-wrapper">
+
+      <table class="plan-table">
+
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>DietPlanId</th>
+            <th>Plan Name</th>
+            <th>Description</th>
+            <th>Duration</th>
+            <th>Created At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- Loading State -->
+          <tr *ngIf="isLoading">
+            <td colspan="7" class="loading-cell">
+              <div class="spinner-container">
+                <div class="pulse-spinner"></div>
+                <span>Loading available plans...</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="!isLoading && filteredPlans.length === 0">
+            <td colspan="7" class="empty-cell">
+              <div class="empty-state">
+                <span class="empty-icon">🥗</span>
+                <p>Oops! No Records Found</p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Data Rows -->
+          <tr *ngFor="let plan of paginatedPlans; let i = index">
+
+            <td>
+              {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+            </td>
+
+            <td class="fw-semibold">
+              #{{ plan.dietPlanId }}
+            </td>
+
+            <td class="fw-semibold text-dark">
+              {{ plan.planName }}
+            </td>
+
+            <td class="description-column">
+
+              <div class="description-wrapper">
+            
+                <span class="description-text">
+                  {{ plan.description }}
+                </span>
+            
+                <div class="info-container">
+            
+                  <div class="info-icon">
+                    i
+                  </div>
+            
+                  <div class="description-popup">
+            
+                    <div class="popup-header">
+                      Diet Plan Description
+                    </div>
+            
+                    <div class="popup-body">
+                      {{ plan.description }}
+                    </div>
+            
+                  </div>
+            
+                </div>
+            
+              </div>
+            
+            </td>
+
+            <td>
+              <span class="badge duration-badge">
+                {{ plan.duration }} Days
+              </span>
+            </td>
+
+            <td>
+              {{ plan.createdAt | date:'dd/MM/yyyy' }}
+            </td>
+
+            <td>
+
+              <button
+                *ngIf="!isApplied(plan.dietPlanId)"
+                class="apply-btn"
+                (click)="applyPlan(plan)">
+
+                Apply
+
+              </button>
+
+              <button
+                *ngIf="isApplied(plan.dietPlanId)"
+                class="applied-btn"
+                disabled>
+
+                Applied
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <!-- Pagination Controls -->
+
+  <div
+    class="pagination-wrapper"
+    *ngIf="filteredPlans.length > 0">
+
+    <button
+      class="page-btn"
+      (click)="previousPage()"
+      [disabled]="currentPage === 1">
+
+      ‹
+
+    </button>
+
+    <span class="page-info">
+      Page <strong>{{ currentPage }}</strong>
+      of
+      <strong>{{ totalPages }}</strong>
+    </span>
+
+    <button
+      class="page-btn"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages">
+
+      ›
+
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Request Restriction Popup -->
+
+<div
+  class="popup-overlay"
+  *ngIf="showPopup">
+
+  <div class="popup-card">
+
+    <div class="warning-icon">
+      !
+    </div>
+
+    <h3>
+      {{ popupTitle }}
+    </h3>
+
+    <p>
+      {{ popupMessage }}
+    </p>
+
+    <button
+      class="popup-btn"
+      (click)="closePopup()">
+
+      OK
+
+    </button>
+
+  </div>
+
+</div>
+`

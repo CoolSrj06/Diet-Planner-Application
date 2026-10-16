@@ -1,0 +1,157 @@
+<!-- Ambient Background -->
+<div class="ambient-background">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+  </div>
+  
+  <div class="page-container">
+  
+    <!-- Header Section -->
+    <div class="header-section">
+      <h2 class="page-title">Diet Plan Application Form</h2>
+      <p class="page-subtitle">Fill in your health metrics to request a customized diet plan.</p>
+    </div>
+  
+    <!-- Form Card -->
+    <div class="form-card glass-panel">
+  
+      <div class="top-section">
+        <button class="back-btn" (click)="back()">
+          ← Back
+        </button>
+      </div>
+  
+      <form [formGroup]="applicationForm" (ngSubmit)="submit()">
+  
+        <!-- Row 1: Age & Weight -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Age <span>*</span></label>
+            <input type="number" formControlName="age" placeholder="e.g. 25">
+  
+            <small class="error" *ngIf="f['age'].touched && f['age'].errors?.['required']">
+              Age is required
+            </small>
+            <small class="error" *ngIf="f['age'].touched && !f['age'].errors?.['required'] && f['age'].errors?.['pattern']">
+              Age must contain only numeric characters
+            </small>
+            <small class="error" *ngIf="f['age'].touched && !f['age'].errors?.['required'] && !f['age'].errors?.['pattern'] && f['age'].errors?.['min']">
+              Age must be greater than or equal to 16
+            </small>
+            <small class="error" *ngIf="f['age'].touched && !f['age'].errors?.['required'] && !f['age'].errors?.['pattern'] && f['age'].errors?.['max']">
+              Age must be less than 100
+            </small>
+          </div>
+  
+          <div class="form-group">
+            <label>Weight (kg) <span>*</span></label>
+            <input type="text" formControlName="weight" placeholder="e.g. 70">
+  
+            <small class="error" *ngIf="f['weight'].touched && f['weight'].errors?.['required']">
+              Weight is required
+            </small>
+            <small class="error" *ngIf="f['weight'].touched && !f['weight'].errors?.['required'] && f['weight'].errors?.['pattern']">
+              Weight must contain only numeric characters
+            </small>
+            <small class="error" *ngIf="f['weight'].touched && !f['weight'].errors?.['required'] && !f['weight'].errors?.['pattern'] && f['weight'].errors?.['min']">
+              Weight must be greater than 0
+            </small>
+            <small class="error" *ngIf="f['weight'].touched && !f['weight'].errors?.['required'] && !f['weight'].errors?.['pattern'] && f['weight'].errors?.['max']">
+              Weight must be less than 700
+            </small>
+          </div>
+        </div>
+  
+        <!-- Row 2: Height & Gender -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Height (cm) <span>*</span></label>
+            <input type="number" formControlName="height" placeholder="Enter height in cm" min="1">
+  
+            <small class="error" *ngIf="f['height'].touched && f['height'].errors?.['required']">
+              Height is required
+            </small>
+            <small class="error" *ngIf="f['height'].touched && f['height'].errors?.['min']">
+              Height must be greater than 0 cm
+            </small>
+          </div>
+  
+          <div class="form-group">
+            <label>Gender <span>*</span></label>
+            <select formControlName="gender">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Row 3: Activity Level -->
+        <div class="form-group">
+          <label>Activity Level <span>*</span></label>
+          <select formControlName="activityLevel">
+            <option value="">Select Activity Level</option>
+            <option value="Sedentary">Sedentary</option>
+            <option value="Lightly Active">Lightly Active</option>
+            <option value="Moderately Active">Moderately Active</option>
+            <option value="Very Active">Very Active</option>
+          </select>
+        </div>
+  
+        <!-- Row 4: Goal -->
+        <div class="form-group">
+          <label>Goal <span>*</span></label>
+          <input type="text" formControlName="goal" placeholder="Enter your fitness goal (maximum 200 words)">
+  
+          <small class="error" *ngIf="f['goal'].touched && f['goal'].errors?.['required']">
+            Goal is required
+          </small>
+          <small class="error" *ngIf="f['goal'].touched && f['goal'].errors?.['whitespace']">
+            Goal cannot contain only spaces
+          </small>
+          <small class="error" *ngIf="f['goal'].touched && !f['goal'].errors?.['whitespace'] && f['goal'].errors?.['leadingSpace']">
+            Goal should not start with whitespace
+          </small>
+          <small class="error" *ngIf="f['goal'].touched && f['goal'].errors?.['maxWords']">
+            Goal should not exceed 200 words
+          </small>
+        </div>
+  
+        <!-- Row 5: Medical Conditions -->
+        <div class="form-group">
+          <label>Medical Conditions <span>*</span></label>
+          <input type="text" formControlName="medicalConditions" placeholder="Enter medical conditions (maximum 300 words)">
+  
+          <small class="error" *ngIf="f['medicalConditions'].touched && f['medicalConditions'].errors?.['required']">
+            Medical conditions are required
+          </small>
+          <small class="error" *ngIf="f['medicalConditions'].touched && f['medicalConditions'].errors?.['whitespace']">
+            Medical conditions cannot contain only spaces
+          </small>
+          <small class="error" *ngIf="f['medicalConditions'].touched && !f['medicalConditions'].errors?.['whitespace'] && f['medicalConditions'].errors?.['leadingSpace']">
+            Medical conditions should not start with whitespace
+          </small>
+          <small class="error" *ngIf="f['medicalConditions'].touched && f['medicalConditions'].errors?.['maxWords']">
+            Medical conditions should not exceed 300 words
+          </small>
+        </div>
+  
+        <button type="submit" class="submit-btn">
+          Submit Application
+        </button>
+  
+      </form>
+  
+    </div>
+  
+  </div>
+  
+  <!-- Success Popup Modal -->
+  <div class="popup-overlay" *ngIf="showSuccessPopup">
+    <div class="popup-card">
+      <div class="success-icon-badge">✓</div>
+      <h3>Successfully Added!</h3>
+      <p>Your diet plan application has been submitted.</p>
+      <button type="button" class="ok-btn" (click)="closePopup()">OK</button>
+    </div>
+  </div>

@@ -1,0 +1,64 @@
+<!-- Ambient Background -->
+<div class="ambient-background">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+  </div>
+  
+  <div class="page-container">
+  
+    <!-- Header Section -->
+    <div class="header-section">
+      <h1 class="page-title">Add Feedback</h1>
+      <p class="page-subtitle">We value your thoughts. Let us know how we can improve your experience.</p>
+    </div>
+  
+    <!-- Form Card -->
+    <div class="feedback-card glass-panel">
+      <form [formGroup]="feedbackForm" (ngSubmit)="submitFeedback()">
+  
+        <div class="form-group">
+          <label>
+            Feedback <span>*</span>
+          </label>
+  
+          <textarea
+            rows="6"
+            formControlName="feedback"
+            maxlength="200"
+            placeholder="Share your experience or suggestions (maximum 200 characters)..."></textarea>
+  
+          <small
+            class="error"
+            *ngIf="feedback?.touched && feedback?.errors?.['required']">
+            Feedback is required
+          </small>
+  
+          <small
+            class="error"
+            *ngIf="feedback?.touched && !feedback?.errors?.['required'] && feedback?.errors?.['whitespace']">
+            Feedback cannot contain only spaces
+          </small>
+  
+          <small
+            class="error"
+            *ngIf="feedback?.touched && !feedback?.errors?.['required'] && feedback?.errors?.['maxlength']">
+            Feedback should not exceed 200 characters
+          </small>
+        </div>
+  
+        <button type="submit" class="submit-btn">Submit Feedback</button>
+  
+      </form>
+    </div>
+  
+  </div>
+  
+  <!-- Success Popup Modal -->
+  <div class="popup-overlay" *ngIf="showSuccessPopup">
+    <div class="popup-card">
+      <div class="success-icon-badge">✓</div>
+      <h3>Successfully Added!</h3>
+      <p>Thank you for your feedback.</p>
+      <button type="button" class="ok-btn" (click)="closePopup()">OK</button>
+    </div>
+  </div>
